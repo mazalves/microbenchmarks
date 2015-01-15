@@ -19,12 +19,23 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-int main (int argc, char *argv[]) {
+// =============================================================================
+uint64_t string_to_uint64(char *string) {
+    uint64_t result = 0;
+    char c;
 
+    for (  ; (c = *string ^ '0') <= 9 && c >= 0; ++string) {
+        result = result * 10 + c;
+    }
+    return result;
+};
+
+// =============================================================================
+int main (int argc, char *argv[]) {
     uint64_t repetitions;
     uint64_t inner_repetitions;
     if(argc == 2) {
-        repetitions = atoi(argv[1]);
+        repetitions = string_to_uint64(argv[1]);
         if (repetitions % 10) {
             printf("Please provide the correct number of inner-repetitions.\n");
             exit(EXIT_FAILURE);

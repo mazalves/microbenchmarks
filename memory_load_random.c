@@ -14,22 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <inttypes.h>
 
 /// Linear Feedback Shift Register now using 32 bits and XNOR. Source at:
 /// http://www.xilinx.com/support/documentation/application_notes/xapp052.pdf
 /// http://www.ece.cmu.edu/~koopman/lfsr/index.html
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <inttypes.h>
+
+// =============================================================================
+uint64_t string_to_uint64(char *string) {
+    uint64_t result = 0;
+    char c;
+
+    for (  ; (c = *string ^ '0') <= 9 && c >= 0; ++string) {
+        result = result * 10 + c;
+    }
+    return result;
+};
+
+// =============================================================================
 struct list {
     uint64_t value;
     uint64_t pad[7];
 };
 typedef struct list element;
 
-///=============================================================================
+// =============================================================================
 int main (int argc, char *argv[]) {
     uint64_t size=0;
     uint64_t repetitions=0;
@@ -38,8 +51,8 @@ int main (int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    repetitions = atoi(argv[1]);
-    size = atoi(argv[2]);
+    repetitions = string_to_uint64(argv[1]);
+    size = string_to_uint64(argv[2]);
 
     if (size % 8 != 0) {
         printf("The array size needs to be divisible by 8.\n");

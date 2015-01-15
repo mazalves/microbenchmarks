@@ -14,20 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+/// Linear Feedback Shift Register using 32 bits and XNOR. Details at:
+/// http://www.xilinx.com/support/documentation/application_notes/xapp052.pdf
+/// http://www.ece.cmu.edu/~koopman/lfsr/index.html
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <inttypes.h>
 
-/// Linear Feedback Shift Register using 32 bits and XNOR. Details at:
-/// http://www.xilinx.com/support/documentation/application_notes/xapp052.pdf
-/// http://www.ece.cmu.edu/~koopman/lfsr/index.html
+// =============================================================================
+uint64_t string_to_uint64(char *string) {
+    uint64_t result = 0;
+    char c;
 
+    for (  ; (c = *string ^ '0') <= 9 && c >= 0; ++string) {
+        result = result * 10 + c;
+    }
+    return result;
+};
+
+// =============================================================================
 int main (int argc, char *argv[]) {
-
     uint64_t repetitions;
     if(argc == 2) {
-        repetitions = atoi(argv[1]);
+        repetitions = string_to_uint64(argv[1]);
     }
     else {
         printf("Please provide the number of repetitions.\n");

@@ -20,19 +20,31 @@
 #include <stdint.h>
 #include <inttypes.h>
 
+// =============================================================================
+uint64_t string_to_uint64(char *string) {
+    uint64_t result = 0;
+    char c;
+
+    for (  ; (c = *string ^ '0') <= 9 && c >= 0; ++string) {
+        result = result * 10 + c;
+    }
+    return result;
+};
+
+// =============================================================================
 struct T_Element {
     uint64_t sum;
     char pad[8];
 };
 typedef struct T_Element t_element;
 
+// =============================================================================
 int main (int argc, char *argv[]) {
-
     uint64_t num_threads, repetitions;
 
     if(argc == 2) {
         num_threads = omp_get_max_threads();
-        repetitions = atoi(argv[1]) / num_threads;
+        repetitions = string_to_uint64(argv[1]) / num_threads;
         printf("Size:%lu bytes\n", sizeof(t_element));
     }
     else {

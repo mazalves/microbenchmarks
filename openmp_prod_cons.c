@@ -20,12 +20,25 @@
 #include <stdint.h>
 #include <inttypes.h>
 
+// =============================================================================
+uint64_t string_to_uint64(char *string) {
+    uint64_t result = 0;
+    char c;
+
+    for (  ; (c = *string ^ '0') <= 9 && c >= 0; ++string) {
+        result = result * 10 + c;
+    }
+    return result;
+};
+
+// =============================================================================
 struct list {
     uint64_t value;
     uint64_t pad[7];
 };
 typedef struct list element;
 
+// =============================================================================
 struct Data {
     omp_lock_t omp_lock;
     uint64_t flag;
@@ -34,15 +47,15 @@ struct Data {
 };
 typedef struct Data th_data;
 
+// =============================================================================
 int main(int argc, char** argv){
-
     th_data *th_pair_data;
     uint64_t elements, repetitions, num_threads;
     uint64_t count, all_sum = 0;
 
     if (argc == 3) {
-        repetitions = atoi(argv[1]);
-        elements = atoi(argv[2]);
+        repetitions = string_to_uint64(argv[1]);
+        elements = string_to_uint64(argv[2]);
         num_threads = omp_get_max_threads();
         if (num_threads % 2 != 0){
             printf("Please execute with an even number of threads.\n");

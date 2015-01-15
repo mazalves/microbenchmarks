@@ -19,6 +19,19 @@
 #include <stdint.h>
 #include <inttypes.h>
 
+// =============================================================================
+uint64_t string_to_uint64(char *string) {
+    uint64_t result = 0;
+    char c;
+
+    for (  ; (c = *string ^ '0') <= 9 && c >= 0; ++string) {
+        result = result * 10 + c;
+    }
+    return result;
+};
+
+// =============================================================================
+
 struct list {
     uint64_t value;
     struct list *next_element;
@@ -26,7 +39,7 @@ struct list {
 };
 typedef struct list element;
 
-///=============================================================================
+// =============================================================================
 int main (int argc, char *argv[]) {
     uint64_t size=0;
     uint64_t repetitions=0;
@@ -35,8 +48,8 @@ int main (int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    repetitions = atoi(argv[1]);
-    size = atoi(argv[2]);
+    repetitions = string_to_uint64(argv[1]);
+    size = string_to_uint64(argv[2]);
 
     if (size % 32 != 0) {
         printf("The array size needs to be divisible by 32 (due to unrolling).\n");

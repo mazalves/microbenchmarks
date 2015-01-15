@@ -20,14 +20,24 @@
 #include <stdint.h>
 #include <inttypes.h>
 
+// =============================================================================
+uint64_t string_to_uint64(char *string) {
+    uint64_t result = 0;
+    char c;
 
+    for (  ; (c = *string ^ '0') <= 9 && c >= 0; ++string) {
+        result = result * 10 + c;
+    }
+    return result;
+};
+
+// =============================================================================
 int main (int argc, char *argv[]) {
-
     uint64_t num_threads, repetitions;
 
     num_threads = omp_get_max_threads();
     if(argc == 2) {
-        repetitions = atoi(argv[1]) / num_threads;
+        repetitions = string_to_uint64(argv[1]) / num_threads;
     }
     else {
         printf("Please provide the number of repetitions.\n");

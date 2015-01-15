@@ -20,20 +20,31 @@
 #include <stdint.h>
 #include <inttypes.h>
 
-int main (int argc, char *argv[]) {
+// =============================================================================
+uint64_t string_to_uint64(char *string) {
+    uint64_t result = 0;
+    char c;
 
+    for (  ; (c = *string ^ '0') <= 9 && c >= 0; ++string) {
+        result = result * 10 + c;
+    }
+    return result;
+};
+
+// =============================================================================
+int main (int argc, char *argv[]) {
     uint64_t num_threads, repetitions, size;
 
     omp_set_num_threads(2);
     num_threads = omp_get_max_threads();
 
     if(argc == 3) {
-        repetitions = atoi(argv[1]) / num_threads;
-        size = atoi(argv[2]) / 8;
+        repetitions = string_to_uint64(argv[1]) / num_threads;
+        size = string_to_uint64(argv[2]) / 8;
         printf("Size:%lu bytes\n", size*sizeof(uint64_t));
     }
     else {
-        printf("Please provide the number of repetitions.\n");
+        printf("Please provide the number of repetitions and size.\n");
         exit(EXIT_FAILURE);
     }
 
